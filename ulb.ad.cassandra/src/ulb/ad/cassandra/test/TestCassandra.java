@@ -1,0 +1,9 @@
+package ulb.ad.cassandra.test;
+
+public class TestCassandra {
+
+	public static void main(String[] args) {
+		System.out.println("Hola Mundo GitHub");
+	}
+
+}
