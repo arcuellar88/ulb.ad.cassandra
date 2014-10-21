@@ -9,8 +9,10 @@ public class TestCassandra {
 		
 		Cluster cluster;
 		Session session;
-		cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-		session = cluster.connect("demo");
+		cluster = Cluster.builder().addContactPoint("cimabue.ulb.ac.be").build();
+		session = cluster.connect("testks");
+		session.execute("INSERT INTO users (lname, age, city, email, fname,id) "
+				+ "VALUES ('Jones', 35, 'Austin', 'bob@example.com', 'Bob',1020)");
 	}
 
 }
