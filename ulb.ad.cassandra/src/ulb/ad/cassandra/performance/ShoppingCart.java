@@ -65,8 +65,7 @@ public class ShoppingCart
 			 sc.runCassandraTest(Integer.parseInt(args[1]),args[2]);
 			 else
 				 sc.runCassandraTest(Integer.parseInt(args[1]),"ONE");
-	
-				 
+			 
 		 }
 		}
 		else

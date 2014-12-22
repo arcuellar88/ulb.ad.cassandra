@@ -45,7 +45,6 @@ public class LoadCustomers {
 			if(d.ready())
 			{
 				String line=d.readLine().trim();
-				System.out.println(line);
 				num= Integer.parseInt(line);
 			}
 			
