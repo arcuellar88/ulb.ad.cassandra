@@ -1,15 +1,17 @@
 package ulb.ad.cassandra.mysql;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import ulb.ad.cassandra.msc.Log;
 
@@ -25,14 +27,14 @@ public class DBConnection
 		
 	}
 	
-	private void connect()
+	public void connect(String host, String user, String pwd, String db)
 	{
 		try
 		{
 		 // this will load the MySQL driver, each DB has its own driver
 	      Class.forName("com.mysql.jdbc.Driver");
 	      // setup the connection with the DB.
-	      connect = DriverManager.getConnection("jdbc:mysql://localhost/live?user=root");
+	      connect = DriverManager.getConnection("jdbc:mysql://"+host+"/"+db,user,pwd);
 	      Log.println("CONNECTED");
 		}
 	    catch (Exception e)
@@ -77,7 +79,7 @@ public class DBConnection
 	 * @param fileName
 	 * @return
 	 */
-	private String readQuery(String fileName)
+	public String readQuery(String fileName)
 	{
 		String query="";
 		File f = new File(fileName);
@@ -101,10 +103,33 @@ public class DBConnection
 		return query;
 	}
 	
+	public void getShoppingCart(String query, int customerid)
+	{
+		// statements allow to issue SQL queries to the database
+	      try 
+	      {
+	    	  preparedStatement= connect.prepareStatement(query);
+	    	  preparedStatement.setInt(1, customerid);
+	    	  preparedStatement.executeQuery();
+			/* resultSet gets the result of the SQL query
+		    while(resultSet.next())
+		    {
+		    }
+		    */
+		    
+	      }
+	      catch (SQLException e) 
+	      {
+			e.printStackTrace();
+		  }
+	      
+	      
+	}
+
 	public static void main(String[] args)
 	{
 		DBConnection db = new DBConnection();
-		db.connect();
+		db.connect("localhost","root","","live");
 		PrintWriter pw;
 		try {
 			pw = new PrintWriter(new File("./data/loadShoppingCartCassandra.txt"));
@@ -116,6 +141,15 @@ public class DBConnection
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void close() {
+		try {
+			connect.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
     
 }
